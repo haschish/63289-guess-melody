@@ -1,7 +1,7 @@
 # Личный проект «Угадай мелодию» [![Build status][travis-image]][travis-url]
 
 * Студент: [Дмитрий Рябинин](https://up.htmlacademy.ru/ecmascript/6/user/63289).
-* Наставник: `Неизвестно`.
+* Наставник: [Александр Махнёв](https://up.htmlacademy.ru/ecmascript/6/user/7392).
 
 ---
 
