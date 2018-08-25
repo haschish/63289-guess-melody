@@ -107,7 +107,7 @@ gulp.task(`build`, [`assemble`], () => {
 
 gulp.task(`test`, () => {
   return gulp
-    .src([`js/**/*.test.js`])
+    .src([`js-test/**/*.test.js`])
     .pipe(rollup({
       plugins: [
         commonjs()
