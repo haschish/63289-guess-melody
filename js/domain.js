@@ -10,13 +10,18 @@ const NUMBER_OF_LIVES = 3;
 const FAIL_POINTS = -1;
 const TIME_GAME = 300;
 
-const successMessage = (...values) => {
-  return `Вы заняли ${values[0]} место из ${values[1]} игроков. Это лучше, чем у ${values[2]}% игроков`
+const successMessage = (position = 1, all = position) => {
+  position = parseInt(position, 10);
+  position = (isNaN(position) || position < 1) ? 1 : position;
+
+  all = parseInt(all, 10);
+  all = (isNaN(all) || all < 1) ? position : all;
+
+  const percentWhoWorse = parseInt((all - position) / all * 100, 10);
+  return `Вы заняли ${position} место из ${all} игроков. Это лучше, чем у ${percentWhoWorse}% игроков`
 };
 const timeoutMessage = `Время вышло! Вы не успели отгадать все мелодии`;
 const attemptsEndMessage = `У вас закончились все попытки. Ничего, повезёт в следующий раз!`;
-const errorMessage = `Error`;
-
 
 const countPoints = (responses = [], lives = 0) => {
   if (responses.length < MIN_ANSWERS) {
@@ -36,14 +41,28 @@ const countPoints = (responses = [], lives = 0) => {
 }
 
 const getResultMessage = (results, result) => {
+  if (!Array.isArray(results)) {
+    throw new Error('first parameter must be an array');
+  }
+
+  if (!(result instanceof Object)) {
+    throw new Error('second parameter must be an object');
+  }
+
+  if (!Number.isInteger(result.points)) {
+    throw new Error('property points must be a number');
+  }
+
+  if (!Number.isInteger(result.lives) || result.lives < 0) {
+    throw new Error('property lives of object result must be a number and >= 0');
+  }
+
+  if (!Number.isInteger(result.time) || result.time < 0) {
+    throw new Error('property time of object result must be a number and >= 0');
+  }
+
   if (result.points === FAIL_POINTS) {
-    if (result.lives === 0) {
-      return attemptsEndMessage;
-    } else if (result.time >= TIME_GAME) {
-      return timeoutMessage;
-    } else {
-      return errorMessage;
-    }
+    return (result.lives === 0) ? attemptsEndMessage : timeoutMessage;
   }
 
   const data = results.concat({...result, player: true});
@@ -57,11 +76,9 @@ const getResultMessage = (results, result) => {
     }
   });
 
-  const index = data.findIndex((item) => item.player);
-  const i = index + 1;
-  const len = data.length;
-  const n = parseInt((len - i) / len * 100, 10);
-  return successMessage(i, len, n);
+  const position = data.findIndex((item) => item.player) + 1;
+  const all = data.length;
+  return successMessage(position, all);
 }
 
 const getLife = (number) => {
@@ -73,7 +90,6 @@ const getTimer = (number) => {
 }
 
 export {
-  errorMessage,
   successMessage,
   timeoutMessage,
   attemptsEndMessage,
