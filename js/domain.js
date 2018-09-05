@@ -89,14 +89,29 @@ const getTimer = (number) => {
   return new Timer(number);
 }
 
+const checkQuestion = (question, answer) => {
+  if (!question || !answer) {
+    return false;
+  }
+
+  if(!(question.answers instanceof Array) || !(answer instanceof Array)) {
+    return false;
+  }
+
+  const correctIndexes = question.answers.reduce((arr, item, index) => (item.correct) ? [...arr, index] : arr, []);
+  return JSON.stringify(correctIndexes.sort()) === JSON.stringify(answer.sort());
+}
+
 export {
+  NUMBER_OF_LIVES,
   successMessage,
   timeoutMessage,
   attemptsEndMessage,
   countPoints,
   getResultMessage,
   getLife,
-  getTimer
+  getTimer,
+  checkQuestion
 };
 
 
