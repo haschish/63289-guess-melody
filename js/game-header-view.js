@@ -15,7 +15,6 @@ class GameHeaderView extends AbstractView {
   }
 
   get template() {
-    const data = (this.data instanceof Object) ? this.data : {};
     return `
       <a class="game__back" href="#">
         <span class="visually-hidden">Сыграть ещё раз</span>

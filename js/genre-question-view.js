@@ -35,11 +35,11 @@ class GenreQuestionView extends GameScreenView {
   }
 
   bind() {
-    this.getCheckboxes().forEach((item) => item.addEventListener(`change`, this.onCheckboxesChange.bind(this)));
+    this.getCheckboxes().forEach((item) => item.addEventListener(`change`, this.onCheckboxChange.bind(this)));
     this.getButtonSubmit().addEventListener(`click`, this.onSubmitClick.bind(this));
   }
 
-  onCheckboxesChange() {
+  onCheckboxChange() {
     const button = this.getButtonSubmit();
     const checked = Array.from(this.getCheckboxes()).some((item) => item.checked);
     button.disabled = !checked;

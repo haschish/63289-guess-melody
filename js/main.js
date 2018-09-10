@@ -27,9 +27,3 @@ const onWelcomeClick = () => {
 const welcome = new Welcome(welcomeData);
 welcome.onClick = onWelcomeClick;
 changeScreen(welcome.element);
-
-
-
-
-
-
