@@ -1,7 +1,5 @@
-import {createElement, changeScreen} from './utils.js';
 import {countPoints, getResultMessage, NUMBER_OF_LIVES} from './domain.js';
-import welcome from './welcome.js';
-import welcomeData from './data/welcome.js';
+import AbstractView from './abstract-view';
 
 const renderResult = (data) => {
   switch (data.points) {
@@ -35,18 +33,38 @@ const getResultData = ({answers, lives, time}) => {
   return result;
 }
 
-export default (data) => {
-  const innerHTML = `
-    <div class="result__logo"><img src="img/melody-logo.png" alt="Угадай мелодию" width="186" height="83"></div>
-    ${renderResult(getResultData(data))}
-    <button class="result__replay" type="button">Сыграть ещё раз</button>
-  `;
+class ResultView extends AbstractView {
+  constructor(data) {
+    super();
+    this.data = data;
+  }
 
-  const element = createElement(`section`, {className: `result`, innerHTML});
-  const button = element.querySelector(`.result__replay`);
-  button.addEventListener(`click`, () => {
-    changeScreen(welcome(welcomeData));
-  });
+  get template() {
+    const data = (this.data instanceof Object) ? this.data : {};
+    return `
+      <div class="result__logo"><img src="img/melody-logo.png" alt="Угадай мелодию" width="186" height="83"></div>
+      ${renderResult(getResultData(data))}
+      <button class="result__replay" type="button">Сыграть ещё раз</button>
+    `;
+  }
 
-  return element;
-};
+  get tagName() {
+    return `section`;
+  }
+
+  get className() {
+    return `result`;
+  }
+
+  bind() {
+    this.element.querySelector(`.result__replay`).addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+      this.onReplayClick();
+    });
+  }
+
+  onReplayClick() {
+  }
+}
+
+export default ResultView;
