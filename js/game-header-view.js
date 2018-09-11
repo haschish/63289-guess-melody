@@ -1,9 +1,10 @@
 import AbstractView from './abstract-view';
 
 class GameHeaderView extends AbstractView {
-  constructor(data) {
+  constructor({time, lives}) {
     super();
-    this.data = data;
+    this.time = time;
+    this.lives = lives;
   }
 
   get tagName() {
@@ -14,7 +15,25 @@ class GameHeaderView extends AbstractView {
     return `game__header`;
   }
 
+  _getTwoDigitNumber(number) {
+    return (number < 10) ? `0${number}` : `${number}`;
+  }
+
+  _getMinutes(time) {
+    const minutes = parseInt(time / 60, 10);
+    return this._getTwoDigitNumber(minutes);
+  }
+
+  _getSeconds(time) {
+    const seconds = time % 60;
+    return this._getTwoDigitNumber(seconds);
+  }
+
   get template() {
+    const {time, lives} = this;
+    const minutes = this._getMinutes(time);
+    const seconds = this._getSeconds(time);
+
     return `
       <a class="game__back" href="#">
         <span class="visually-hidden">Сыграть ещё раз</span>
@@ -27,15 +46,13 @@ class GameHeaderView extends AbstractView {
       </svg>
 
       <div class="timer__value" xmlns="http://www.w3.org/1999/xhtml">
-        <span class="timer__mins">05</span>
+        <span class="timer__mins">${minutes}</span>
         <span class="timer__dots">:</span>
-        <span class="timer__secs">00</span>
+        <span class="timer__secs">${seconds}</span>
       </div>
 
       <div class="game__mistakes">
-        <div class="wrong"></div>
-        <div class="wrong"></div>
-        <div class="wrong"></div>
+        ${Array.from({length: lives}).map(() => `<div class="wrong"></div>`).join('')}
       </div>
     `;
   }

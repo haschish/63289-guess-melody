@@ -104,6 +104,7 @@ const checkQuestion = (question, answer) => {
 
 export {
   NUMBER_OF_LIVES,
+  TIME_GAME,
   successMessage,
   timeoutMessage,
   attemptsEndMessage,

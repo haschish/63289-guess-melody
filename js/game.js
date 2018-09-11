@@ -1,90 +1,89 @@
 import {createElement} from './utils.js';
-import {checkQuestion, getLife, getTimer} from './domain.js';
 import GameHeaderView from './game-header-view.js';
 import GameScreenView from './game-screen-view';
 import GenreQuestionView from './genre-question-view';
 import ArtistQuestionView from './artist-question-view';
+import Application from './application';
+
+const ONE_SECOND = 1000;
 
 class Game {
-  constructor(data) {
-    this.questions = data;
-    this.answers = [];
-    this.currentQuestionIndex = 0;
-    this.life = getLife(3);
-    this.timer = getTimer(30);
+  constructor(model) {
+    this.model = model;
+    this.model.onQuestionChange = this._renderQuestion.bind(this);
+    this.model.onTimeChange = this.updateHeader.bind(this);
+    this.model.onLivesChange = this.updateHeader.bind(this);
+    this.model.onEndGame = this.end.bind(this);
+
+
+    this.gameScreen = new GameScreenView();
+    this.header = this._getHeader();
 
     this.root = createElement(`section`, {className: `game game--genre`});
-    this.gameScreen = new GameScreenView();
-    this.header = new GameHeaderView();
-    this.header.onBackClick = this.exit.bind(this);
-
-
     this.root.appendChild(this.header.element);
     this.root.appendChild(this.gameScreen.element);
-    this._renderQuestion();
   }
 
   _renderQuestion() {
-    const question = this.questions[this.currentQuestionIndex];
+    const question = this.model.question;
     let gameScreen;
     switch (question.type) {
       case `genre`: gameScreen = new GenreQuestionView(question); break;
       case `artist`: gameScreen = new ArtistQuestionView(question); break;
     }
+    gameScreen.onAnswer = this._answer.bind(this);
 
     this.root.replaceChild(gameScreen.element, this.gameScreen.element);
     this.gameScreen = gameScreen;
-    this.gameScreen.onAnswer = this.answer.bind(this);
   }
 
   get element() {
     return this.root;
   }
 
-  answer(selectedIndexes) {   // Обработка ответа пользователя
-    const question = this.questions[this.currentQuestionIndex];
-    const answer = {
-      correct: checkQuestion(question, selectedIndexes),
-      time: 30 //TODO
-    };
+  _answer(selectedIndexes) {
+    this.model.answer = selectedIndexes;
+  }
 
-    if (!answer.correct) {
-      if (this.life.decrease() === 0) {
-        this.end()
-        return;
-      }
-    }
+  _exit() {
+    Application.showWelcome();
+  }
 
-    this.answers.push(answer);
-    this.currentQuestionIndex++;
+  _startTimer() {
+    this.timer = setTimeout(() => {
+      this.tick();
+      this._startTimer();
+    }, ONE_SECOND);
+  }
 
-    if (this.currentQuestionIndex >= this.questions.length) {
-      this.end()
-      return;
-    }
+  _stopTimer() {
+    clearTimeout(this.timer);
+  }
 
+  _getHeader() {
+    const header = new GameHeaderView(this.model.state);
+    header.onBackClick = this._exit.bind(this);
+    return header;
+  }
+
+  start() {
+    this._startTimer();
     this._renderQuestion();
   }
 
-  exit() {
-    this.onExit();
+  end() {
+    this._stopTimer();
+    Application.showResult(this.model.state);
   }
 
-  end() {
-    this.onEnd({
-      answers: this.answers,
-      lives: this.life.count,
-      time: this.timer.count
-    });
+  tick() {
+    this.model.tick();
   }
 
   updateHeader() {
-  }
-
-  onExit() {
-  }
-
-  onEnd() {
+    const header = this._getHeader();
+    this.root.replaceChild(header.element, this.header.element);
+    this.header = header;
   }
 }
 
