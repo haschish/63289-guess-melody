@@ -67,8 +67,6 @@ class GameModel {
     }
   }
 
-
-
   _endGame() {
     this.onEndGame();
   }

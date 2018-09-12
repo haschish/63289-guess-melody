@@ -25,7 +25,7 @@ const attemptsEndMessage = `У вас закончились все попытк
 
 const countPoints = (responses = [], lives = 0) => {
   if (responses.length < MIN_ANSWERS) {
-    return -1;
+    return FAIL_POINTS;
   }
 
   let sum = 0;
@@ -105,6 +105,8 @@ const checkQuestion = (question, answer) => {
 export {
   NUMBER_OF_LIVES,
   TIME_GAME,
+  FAIL_POINTS,
+  TIME_FAST_ANSWER,
   successMessage,
   timeoutMessage,
   attemptsEndMessage,

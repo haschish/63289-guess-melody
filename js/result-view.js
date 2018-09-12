@@ -1,9 +1,9 @@
-import {countPoints, getResultMessage, NUMBER_OF_LIVES} from './domain.js';
+import {countPoints, getResultMessage, NUMBER_OF_LIVES, FAIL_POINTS, TIME_FAST_ANSWER} from './domain.js';
 import AbstractView from './abstract-view.js';
 
 const renderResult = (data) => {
   switch (data.points) {
-    case -1: return `
+    case FAIL_POINTS: return `
       <h2 class="result__title">${data.title}</h2>
       <p class="result__total result__total--fail">${data.text}</p>
     `;
@@ -23,9 +23,11 @@ const getResultData = ({answers, lives, time}) => {
     time
   };
   result.text = getResultMessage([], result);
-  if (result.points > -1) {
+  if (result.points > FAIL_POINTS) {
+    const countFastAnswers = answers.filter((item) => item.time < TIME_FAST_ANSWER).length;
+
     result.title = `Вы настоящий меломан!`;
-    result.total = `За ${time} секунд вы набрали ${points} баллов (8 быстрых), совершив ${NUMBER_OF_LIVES - lives} ошибки`;
+    result.total = `За ${time} секунд вы набрали ${points} баллов (${countFastAnswers} быстрых), совершив ${NUMBER_OF_LIVES - lives} ошибки`;
   } else {
     result.title = (lives === 0) ? `Какая жалость!` : `Увы и ах!`;
   }
