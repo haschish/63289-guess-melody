@@ -1,70 +1,19 @@
-import {countPoints, getResultMessage, NUMBER_OF_LIVES} from './domain.js';
-import AbstractView from './abstract-view';
+import ResultView from './result-view';
+import Application from './application';
 
-const renderResult = (data) => {
-  switch (data.points) {
-    case -1: return `
-      <h2 class="result__title">${data.title}</h2>
-      <p class="result__total result__total--fail">${data.text}</p>
-    `;
-    default: return `
-      <h2 class="result__title">${data.title}</h2>
-      <p class="result__total">${data.total}</p>
-      <p class="result__text">${data.text}</p>
-    `;
-  }
-}
-
-const getResultData = ({answers, lives, time}) => {
-  const points = countPoints(answers, lives);
-  const result = {
-    points,
-    lives,
-    time
-  };
-  result.text = getResultMessage([], result);
-  if (result.points > -1) {
-    result.title = `Вы настоящий меломан!`;
-    result.total = `За ${time} секунд вы набрали ${points} баллов (8 быстрых), совершив ${NUMBER_OF_LIVES - lives} ошибки`;
-  } else {
-    result.title = (lives === 0) ? `Какая жалость!` : `Увы и ах!`;
-  }
-
-  return result;
-}
-
-class ResultView extends AbstractView {
+class Welcome {
   constructor(data) {
-    super();
-    this.data = data;
+    this.view = new ResultView(data);
+    this.view.onReplayClick = this.onReplayClick.bind(this);
   }
 
-  get template() {
-    const data = (this.data instanceof Object) ? this.data : {};
-    return `
-      <div class="result__logo"><img src="img/melody-logo.png" alt="Угадай мелодию" width="186" height="83"></div>
-      ${renderResult(getResultData(data))}
-      <button class="result__replay" type="button">Сыграть ещё раз</button>
-    `;
-  }
-
-  get tagName() {
-    return `section`;
-  }
-
-  get className() {
-    return `result`;
-  }
-
-  bind() {
-    this.element.querySelector(`.result__replay`).addEventListener(`click`, (evt) => {
-      evt.preventDefault();
-      this.onReplayClick();
-    });
+  get element() {
+    return this.view.element;
   }
 
   onReplayClick() {
+    Application.showWelcome();
   }
 }
 
-export default ResultView;
+export default Welcome;
