@@ -4,7 +4,7 @@ import questions from './data/questions.js';
 import GameModel from './game-model';
 import Game from './game';
 import Result from './result';
-import Api from './api';
+import API from './api';
 
 class Application {
 
@@ -14,7 +14,7 @@ class Application {
   }
 
   static showGame() {
-    Api.loadQuestions()
+    API.loadQuestions()
       .then((questions) => new GameModel({questions}))
       .then((model) => new Game(model))
       .then((game) => {

@@ -36,8 +36,8 @@ class ArtistQuestionView extends GameScreenView {
 
   onRadioInputsChange(evt) {
     evt.preventDefault();
-    const selectedIndexes = Array.from(this.getRadioInputs()).filter((item) => item.checked).map((item) => parseInt(item.value, 10));
-    this.onAnswer(selectedIndexes[0]);
+    const checkedInput = Array.from(this.getRadioInputs()).find((item) => item.checked);
+    this.onAnswer(parseInt(checkedInput.value, 10));
   };
 
   onAnswer(selectedIndexes) {

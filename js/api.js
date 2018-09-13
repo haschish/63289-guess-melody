@@ -11,10 +11,10 @@ const checkStatus = (res) => {
 
 const toJSON = (res) => res.json();
 
-class Api {
+class API {
   static loadQuestions() {
     return fetch(URL).then(checkStatus).then(toJSON);
   }
 }
 
-export default Api
+export default API
