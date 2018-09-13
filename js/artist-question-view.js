@@ -16,8 +16,8 @@ class ArtistQuestionView extends GameScreenView {
             <div class="artist">
               <input class="artist__input visually-hidden" type="radio" name="answer" value="${index}" id="answer-${index}">
               <label class="artist__name" for="answer-${index}">
-                <img class="artist__picture" src="${item.src || `http://placehold.it/134x134`}" alt="${item.text}">
-                ${item.text}
+                <img class="artist__picture" src="${item.image.url || `http://placehold.it/134x134`}" alt="${item.title}">
+                ${item.title}
               </label>
             </div>
           `;
@@ -36,8 +36,8 @@ class ArtistQuestionView extends GameScreenView {
 
   onRadioInputsChange(evt) {
     evt.preventDefault();
-    const selectedIndexes = Array.from(this.getRadioInputs()).filter((item) => item.checked).map((item) => parseInt(item.value, 10));
-    this.onAnswer(selectedIndexes);
+    const checkedInput = Array.from(this.getRadioInputs()).find((item) => item.checked);
+    this.onAnswer(parseInt(checkedInput.value, 10));
   };
 
   onAnswer(selectedIndexes) {

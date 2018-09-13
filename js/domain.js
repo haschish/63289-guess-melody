@@ -102,6 +102,18 @@ const checkQuestion = (question, answer) => {
   return JSON.stringify(correctIndexes.sort()) === JSON.stringify(answer.sort());
 }
 
+const checkArtistQuestion = (question, answerIndex) => {
+  if(!(question.answers instanceof Array) || !(typeof answerIndex === 'number')) {
+    return false;
+  }
+
+  return question.answers[answerIndex].isCorrect;
+}
+
+const checkGenreQuestion = (question, answer) => {
+  return answer.every((item) => item === question.genre);
+}
+
 export {
   NUMBER_OF_LIVES,
   TIME_GAME,
@@ -114,7 +126,9 @@ export {
   getResultMessage,
   getLife,
   getTimer,
-  checkQuestion
+  checkQuestion,
+  checkArtistQuestion,
+  checkGenreQuestion
 };
 
 

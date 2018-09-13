@@ -1,4 +1,4 @@
-import {checkQuestion, NUMBER_OF_LIVES, TIME_GAME} from './domain.js';
+import {checkArtistQuestion, checkGenreQuestion, NUMBER_OF_LIVES, TIME_GAME} from './domain.js';
 
 class GameModel {
   constructor(data) {
@@ -26,9 +26,13 @@ class GameModel {
 
   set answer(selectedIndexes) {
     const answer = {
-      correct: checkQuestion(this.question, selectedIndexes),
       time: this.state.timeAnswer
     };
+
+    switch(this.question.type) {
+      case 'genre': answer.correct = checkGenreQuestion(this.question, selectedIndexes); break;
+      case 'artist': answer.correct = checkArtistQuestion(this.question, selectedIndexes); break;
+    }
 
     if (!answer.correct) {
       this._decreaseLives();

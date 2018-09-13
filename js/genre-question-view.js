@@ -4,7 +4,7 @@ class GenreQuestionView extends GameScreenView {
   get template() {
     const data = this.data;
     return `
-      <h2 class="game__title">${data.text}</h2>
+      <h2 class="game__title">${data.question}</h2>
       <form class="game__tracks">
         ${data.answers.map((item, index) => {
           return `
@@ -14,7 +14,7 @@ class GenreQuestionView extends GameScreenView {
                 <audio></audio>
               </div>
               <div class="game__answer">
-                <input class="game__input visually-hidden" type="checkbox" name="answer" value="${index}" id="answer-${index}">
+                <input class="game__input visually-hidden" type="checkbox" name="answer" value="${item.genre}" id="answer-${index}">
                 <label class="game__check" for="answer-${index}">Отметить</label>
               </div>
             </div>
@@ -47,7 +47,7 @@ class GenreQuestionView extends GameScreenView {
 
   onSubmitClick(evt) {
     evt.preventDefault();
-    const selectedIndexes = Array.from(this.getCheckboxes()).filter((item) => item.checked).map((item) => parseInt(item.value, 10));
+    const selectedIndexes = Array.from(this.getCheckboxes()).filter((item) => item.checked).map((item) => item.value);
     this.onAnswer(selectedIndexes);
   }
 
