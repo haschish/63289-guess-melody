@@ -31,7 +31,7 @@ class Game {
       case `genre`: gameScreen = new GenreQuestionView(question); break;
       case `artist`: gameScreen = new ArtistQuestionView(question); break;
     }
-    gameScreen.onAnswer = this._answer.bind(this);
+    gameScreen.onAnswer = this.onGameScreenAnswer.bind(this);
 
     this.root.replaceChild(gameScreen.element, this.gameScreen.element);
     this.gameScreen = gameScreen;
@@ -41,8 +41,8 @@ class Game {
     return this.root;
   }
 
-  _answer(selectedIndexes) {
-    this.model.answer = selectedIndexes;
+  onGameScreenAnswer(answer) {
+    this.model.answer = answer;
   }
 
   _exit() {

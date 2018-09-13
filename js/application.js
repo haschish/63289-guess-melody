@@ -4,6 +4,7 @@ import questions from './data/questions.js';
 import GameModel from './game-model';
 import Game from './game';
 import Result from './result';
+import Api from './api';
 
 class Application {
 
@@ -13,10 +14,14 @@ class Application {
   }
 
   static showGame() {
-    const model = new GameModel({questions});
-    const game = new Game(model);
-    changeScreen(game.element);
-    game.start();
+    Api.loadQuestions()
+      .then((questions) => new GameModel({questions}))
+      .then((model) => new Game(model))
+      .then((game) => {
+        changeScreen(game.element);
+        game.start();
+      })
+      .catch(console.log);
   }
 
   static showResult(resultData) {
