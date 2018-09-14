@@ -7,11 +7,14 @@ class GenreQuestionView extends GameScreenView {
       <h2 class="game__title">${data.question}</h2>
       <form class="game__tracks">
         ${data.answers.map((item, index) => {
+          const autoplay = (index === 0) ? `autoplay="true"` : ``;
+          const trackButtonClass = (index === 0) ? `track__button--pause` : `track__button--play`;
+
           return `
             <div class="track">
-              <button class="track__button track__button--play" type="button"></button>
+              <button class="track__button ${trackButtonClass}" type="button" data-index="${index}"></button>
               <div class="track__status">
-                <audio></audio>
+                <audio src="${item.src}" ${autoplay} loop="true"></audio>
               </div>
               <div class="game__answer">
                 <input class="game__input visually-hidden" type="checkbox" name="answer" value="${item.genre}" id="answer-${index}">
@@ -34,8 +37,17 @@ class GenreQuestionView extends GameScreenView {
     return this.element.querySelectorAll(`[type="checkbox"]`);
   }
 
+  getTrackButtons() {
+    return this.element.querySelectorAll(`.track__button`);
+  }
+
+  getAudios() {
+    return this.element.querySelectorAll(`audio`);
+  }
+
   bind() {
     this.getCheckboxes().forEach((item) => item.addEventListener(`change`, this.onCheckboxChange.bind(this)));
+    this.getTrackButtons().forEach((item) => item.addEventListener(`click`, this.onTrackButtonClick.bind(this)));
     this.getButtonSubmit().addEventListener(`click`, this.onSubmitClick.bind(this));
   }
 
@@ -43,6 +55,24 @@ class GenreQuestionView extends GameScreenView {
     const button = this.getButtonSubmit();
     const checked = Array.from(this.getCheckboxes()).some((item) => item.checked);
     button.disabled = !checked;
+  }
+
+  onTrackButtonClick(evt) {
+    const index = parseInt(evt.target.dataset.index, 10);
+    const prefix = `track__button`;
+    const buttons = this.getTrackButtons();
+    const audios = this.getAudios();
+    const classList = evt.target.classList;
+
+    if (classList.contains(`${prefix}--pause`)) {
+      buttons[index].classList.replace(`${prefix}--pause`, `${prefix}--play`);
+      audios[index].pause();
+    } else {
+      buttons.forEach((item) => item.classList.replace(`${prefix}--pause`, `${prefix}--play`));
+      audios.forEach((item) => item.pause());
+      buttons[index].classList.replace(`${prefix}--play`, `${prefix}--pause`);
+      audios[index].play();
+    }
   }
 
   onSubmitClick(evt) {

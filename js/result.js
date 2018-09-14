@@ -1,8 +1,10 @@
 import ResultView from './result-view';
 import Application from './application';
+import {getResultData} from './domain.js';
 
-class Welcome {
+class Result {
   constructor(data) {
+    this.data = data;
     this.view = new ResultView(data);
     this.view.onReplayClick = this.onReplayClick.bind(this);
   }
@@ -16,4 +18,4 @@ class Welcome {
   }
 }
 
-export default Welcome;
+export default Result;
