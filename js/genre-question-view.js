@@ -8,7 +8,7 @@ class GenreQuestionView extends GameScreenView {
       <form class="game__tracks">
         ${data.answers.map((item, index) => {
           const autoplay = (index === 0) ? `autoplay="true"` : ``;
-          const trackButtonClass = (index === 0) ? `track__button--play` : `track__button--pause`;
+          const trackButtonClass = (index === 0) ? `track__button--pause` : `track__button--play`;
 
           return `
             <div class="track">
@@ -64,13 +64,13 @@ class GenreQuestionView extends GameScreenView {
     const audios = this.getAudios();
     const classList = evt.target.classList;
 
-    if (classList.contains(`${prefix}--play`)) {
-      buttons[index].classList.replace(`${prefix}--play`, `${prefix}--pause`);
+    if (classList.contains(`${prefix}--pause`)) {
+      buttons[index].classList.replace(`${prefix}--pause`, `${prefix}--play`);
       audios[index].pause();
     } else {
-      buttons.forEach((item) => item.classList.replace(`${prefix}--play`, `${prefix}--pause`));
+      buttons.forEach((item) => item.classList.replace(`${prefix}--pause`, `${prefix}--play`));
       audios.forEach((item) => item.pause());
-      buttons[index].classList.replace(`${prefix}--pause`, `${prefix}--play`);
+      buttons[index].classList.replace(`${prefix}--play`, `${prefix}--pause`);
       audios[index].play();
     }
   }
