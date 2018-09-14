@@ -6,8 +6,8 @@ class ArtistQuestionView extends GameScreenView {
     return `
       <h2 class="game__title">Кто исполняет эту песню?</h2>
       <div class="game__track">
-        <button class="track__button track__button--play" type="button"></button>
-        <audio></audio>
+        <button class="track__button track__button--pause" type="button"></button>
+        <audio src="${data.src}" autoplay="true" loop="true"></audio>
       </div>
 
       <form class="game__artist">
@@ -30,15 +30,38 @@ class ArtistQuestionView extends GameScreenView {
     return this.element.querySelectorAll(`[type="radio"]`);
   }
 
-  bind() {
-    this.getRadioInputs().forEach((item) => item.addEventListener(`change`, this.onRadioInputsChange.bind(this)));
+  getTrackButton() {
+    return this.element.querySelector(`.track__button`);
   }
 
-  onRadioInputsChange(evt) {
+  getAudio() {
+    return this.element.querySelector(`audio`);
+  }
+
+  bind() {
+    this.getRadioInputs().forEach((item) => item.addEventListener(`change`, this.onRadioInputChange.bind(this)));
+    this.getTrackButton().addEventListener(`click`, this.onTrackButtonClick.bind(this));
+  }
+
+  onRadioInputChange(evt) {
     evt.preventDefault();
     const checkedInput = Array.from(this.getRadioInputs()).find((item) => item.checked);
     this.onAnswer(parseInt(checkedInput.value, 10));
-  };
+  }
+
+  onTrackButtonClick(evt) {
+    const prefix = `track__button`;
+    const classList = evt.target.classList;
+    const audio = this.getAudio();
+
+    if (classList.contains(`${prefix}--pause`)) {
+      classList.replace(`${prefix}--pause`, `${prefix}--play`);
+      audio.pause();
+    } else {
+      classList.replace(`${prefix}--play`, `${prefix}--pause`)
+      audio.play();
+    }
+  }
 
   onAnswer(selectedIndexes) {
   }

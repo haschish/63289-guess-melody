@@ -1,5 +1,6 @@
 
-const URL = `https://es.dump.academy/guess-melody/questions`;
+const URL = `https://es.dump.academy/guess-melody`;
+const APP_ID = '1Kiek33kdE093df4';
 
 const checkStatus = (res) => {
   if (res.ok) {
@@ -13,7 +14,22 @@ const toJSON = (res) => res.json();
 
 class API {
   static loadQuestions() {
-    return fetch(URL).then(checkStatus).then(toJSON);
+    return fetch(`${URL}/questions`).then(checkStatus).then(toJSON);
+  }
+
+  static loadResults() {
+    return fetch(`${URL}/stats/${APP_ID}`).then(checkStatus).then(toJSON);
+  }
+
+  static saveResult(data) {
+    const requestSettings = {
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': `application/json`
+      },
+      method: `POST`
+    };
+    return fetch(`${URL}/stats/${APP_ID}`, requestSettings).then(checkStatus);
   }
 }
 

@@ -15,37 +15,16 @@ const renderResult = (data) => {
   }
 }
 
-const getResultData = ({answers, lives, time}) => {
-  const points = countPoints(answers, lives);
-  const result = {
-    points,
-    lives,
-    time
-  };
-  result.text = getResultMessage([], result);
-  if (result.points > FAIL_POINTS) {
-    const countFastAnswers = answers.filter((item) => item.time < TIME_FAST_ANSWER).length;
-
-    result.title = `Вы настоящий меломан!`;
-    result.total = `За ${time} секунд вы набрали ${points} баллов (${countFastAnswers} быстрых), совершив ${NUMBER_OF_LIVES - lives} ошибки`;
-  } else {
-    result.title = (lives === 0) ? `Какая жалость!` : `Увы и ах!`;
-  }
-
-  return result;
-}
-
 class ResultView extends AbstractView {
   constructor(data) {
     super();
-    this.data = data;
+    this.data = (data instanceof Object) ? data : {};;
   }
 
   get template() {
-    const data = (this.data instanceof Object) ? this.data : {};
     return `
       <div class="result__logo"><img src="img/melody-logo.png" alt="Угадай мелодию" width="186" height="83"></div>
-      ${renderResult(getResultData(data))}
+      ${renderResult(this.data)}
       <button class="result__replay" type="button">Сыграть ещё раз</button>
     `;
   }

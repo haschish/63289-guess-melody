@@ -81,6 +81,27 @@ const getResultMessage = (results, result) => {
   return successMessage(position, all);
 }
 
+const getResultData = (results, result) => {
+  const {answers, lives, time} = result;
+  const points = countPoints(answers, lives);
+  const resultData = {
+    points,
+    lives,
+    time
+  };
+  resultData.text = getResultMessage(results, resultData);
+  if (resultData.points > FAIL_POINTS) {
+    const countFastAnswers = answers.filter((item) => item.time < TIME_FAST_ANSWER).length;
+
+    resultData.title = `Вы настоящий меломан!`;
+    resultData.total = `За ${time} секунд вы набрали ${points} баллов (${countFastAnswers} быстрых), совершив ${NUMBER_OF_LIVES - lives} ошибки`;
+  } else {
+    resultData.title = (lives === 0) ? `Какая жалость!` : `Увы и ах!`;
+  }
+
+  return resultData;
+}
+
 const getLife = (number) => {
   return new Life(number);
 }
@@ -124,6 +145,7 @@ export {
   attemptsEndMessage,
   countPoints,
   getResultMessage,
+  getResultData,
   getLife,
   getTimer,
   checkQuestion,
