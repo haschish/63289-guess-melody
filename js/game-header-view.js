@@ -1,5 +1,5 @@
 import AbstractView from './abstract-view';
-import {NUMBER_OF_LIVES, TIME_FINISHED} from './domain';
+import {NUMBER_OF_LIVES, TIME_FINISHED, TIME_GAME} from './domain';
 
 class GameHeaderView extends AbstractView {
   constructor({time, lives}) {
@@ -35,6 +35,9 @@ class GameHeaderView extends AbstractView {
     const minutes = this._getMinutes(time);
     const seconds = this._getSeconds(time);
     const timerClassFinished = (time < TIME_FINISHED) ? `timer__value--finished` : ``;
+    const rCircle = 370;
+    const lengthCircle = Math.floor(2 * Math.PI * rCircle);
+    const offset = Math.floor(lengthCircle - time * lengthCircle / TIME_GAME);
 
     return `
       <a class="game__back" href="#">
@@ -43,7 +46,7 @@ class GameHeaderView extends AbstractView {
       </a>
 
       <svg xmlns="http://www.w3.org/2000/svg" class="timer" viewBox="0 0 780 780">
-        <circle class="timer__line" cx="390" cy="390" r="370"
+        <circle class="timer__line" cx="390" cy="390" r="${rCircle}" stroke-dashoffset="${offset}" stroke-dasharray="${lengthCircle}"
                 style="filter: url(.#blur); transform: rotate(-90deg) scaleY(-1); transform-origin: center"/>
       </svg>
 
