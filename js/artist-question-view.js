@@ -1,4 +1,5 @@
 import GameScreenView from './game-screen-view';
+import {debugMode} from './application';
 
 class ArtistQuestionView extends GameScreenView {
   get template() {
@@ -12,11 +13,12 @@ class ArtistQuestionView extends GameScreenView {
 
       <form class="game__artist">
         ${data.answers.map((item, index) => {
+    const debugTipStyle = (debugMode && item.isCorrect) ? `style="border: solid 5px red;"` : ``;
     return `
       <div class="artist">
         <input class="artist__input visually-hidden" type="radio" name="answer" value="${index}" id="answer-${index}">
         <label class="artist__name" for="answer-${index}">
-          <img class="artist__picture" src="${item.image.url || `http://placehold.it/134x134`}" alt="${item.title}">
+          <img class="artist__picture" src="${item.image.url || `http://placehold.it/134x134`}" alt="${item.title}" ${debugTipStyle}>
           ${item.title}
         </label>
       </div>

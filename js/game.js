@@ -3,27 +3,9 @@ import GameHeaderView from './game-header-view.js';
 import GameScreenView from './game-screen-view';
 import GenreQuestionView from './genre-question-view';
 import ArtistQuestionView from './artist-question-view';
-import Application, {debugMode} from './application';
+import Application from './application';
 
 const ONE_SECOND = 1000;
-
-const getGenreAnswer = (question) => {
-  return question.answers.reduce((arr, item, index) => (item.genre === question.genre) ? arr.concat(index) : arr, []);
-};
-
-const getArtistAnswer = (question) => {
-  return question.answers.find((item) => item.isCorrect).title;
-};
-
-const consoleAnswer = (question) => {
-  let answer;
-  switch (question.type) {
-    case `genre`: answer = getGenreAnswer(question); break;
-    case `artist`: answer = getArtistAnswer(question); break;
-  }
-  return answer;
-  // console.info(answer);
-};
 
 class Game {
   constructor(model) {
@@ -44,13 +26,6 @@ class Game {
 
   _renderQuestion() {
     const question = this.model.question;
-
-    // <debug>
-    if (debugMode) {
-      consoleAnswer(question);
-    }
-    // </debug>
-
     let gameScreen;
     switch (question.type) {
       case `genre`: gameScreen = new GenreQuestionView(question); break;

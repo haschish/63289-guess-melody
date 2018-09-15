@@ -1,4 +1,5 @@
 import GameScreenView from './game-screen-view';
+import {debugMode} from './application';
 
 class GenreQuestionView extends GameScreenView {
   get template() {
@@ -9,6 +10,7 @@ class GenreQuestionView extends GameScreenView {
         ${data.answers.map((item, index) => {
     const autoplay = (index === 0) ? `autoplay="true"` : ``;
     const trackButtonClass = (index === 0) ? `track__button--pause` : `track__button--play`;
+    const debugTipStyle = (debugMode && item.genre === data.genre) ? `style="border-bottom: solid 2px red;"` : ``;
 
     return `
       <div class="track">
@@ -18,7 +20,7 @@ class GenreQuestionView extends GameScreenView {
         </div>
         <div class="game__answer">
           <input class="game__input visually-hidden" type="checkbox" name="answer" value="${item.genre}" id="answer-${index}">
-          <label class="game__check" for="answer-${index}">Отметить</label>
+          <label class="game__check" for="answer-${index}" ${debugTipStyle}>Отметить</label>
         </div>
       </div>
     `;

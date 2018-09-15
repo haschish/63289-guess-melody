@@ -47,7 +47,7 @@ class Application {
 
 export default Application;
 
-const debugMode = true;
+const debugMode = false;
 
 export {
   debugMode
