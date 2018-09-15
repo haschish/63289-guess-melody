@@ -9,6 +9,7 @@ const MIN_ANSWERS = 10;
 const NUMBER_OF_LIVES = 3;
 const FAIL_POINTS = -1;
 const TIME_GAME = 300;
+const TIME_FINISHED = 30;
 
 const successMessage = (position = 1, all = position) => {
   position = parseInt(position, 10);
@@ -138,6 +139,7 @@ const checkGenreQuestion = (question, answer) => {
 export {
   NUMBER_OF_LIVES,
   TIME_GAME,
+  TIME_FINISHED,
   FAIL_POINTS,
   TIME_FAST_ANSWER,
   successMessage,
