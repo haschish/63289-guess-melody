@@ -46,10 +46,7 @@ class Game {
   }
 
   _exit() {
-    const isConfirmed = confirm(`Вы действительно хотите выйти? Ваша игра будет потеряна.`);
-    if (isConfirmed) {
-      Application.showWelcome();
-    }
+    Application.showWelcome();
   }
 
   _startTimer() {
