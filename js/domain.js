@@ -18,7 +18,7 @@ const successMessage = (position = 1, all = position) => {
   all = (isNaN(all) || all < 1) ? position : all;
 
   const percentWhoWorse = parseInt((all - position) / all * 100, 10);
-  return `Вы заняли ${position} место из ${all} игроков. Это лучше, чем у ${percentWhoWorse}% игроков`
+  return `Вы заняли ${position} место из ${all} игроков. Это лучше, чем у ${percentWhoWorse}% игроков`;
 };
 const timeoutMessage = `Время вышло! Вы не успели отгадать все мелодии`;
 const attemptsEndMessage = `У вас закончились все попытки. Ничего, повезёт в следующий раз!`;
@@ -38,37 +38,37 @@ const countPoints = (responses = [], lives = 0) => {
   sum += (lives - NUMBER_OF_LIVES) * K_FOR_FAIL;
 
   return Math.max(sum, 0);
-}
+};
 
 const getResultMessage = (results, result) => {
   if (!Array.isArray(results)) {
-    throw new Error('first parameter must be an array');
+    throw new Error(`first parameter must be an array`);
   }
 
   if (!(result instanceof Object)) {
-    throw new Error('second parameter must be an object');
+    throw new Error(`second parameter must be an object`);
   }
 
   if (!Number.isInteger(result.points)) {
-    throw new Error('property points must be a number');
+    throw new Error(`property points must be a number`);
   }
 
   if (!Number.isInteger(result.lives) || result.lives < 0) {
-    throw new Error('property lives of object result must be a number and >= 0');
+    throw new Error(`property lives of object result must be a number and >= 0`);
   }
 
   if (!Number.isInteger(result.time) || result.time < 0) {
-    throw new Error('property time of object result must be a number and >= 0');
+    throw new Error(`property time of object result must be a number and >= 0`);
   }
 
   if (result.points === FAIL_POINTS) {
     return (result.lives === 0) ? attemptsEndMessage : timeoutMessage;
   }
 
-  const data = results.concat({...result, player: true});
+  const data = results.concat(Object.assign({}, result, {player: true}));
   data.sort((a, b) => {
     if (a.points !== b.points) {
-      return b.points - a.points
+      return b.points - a.points;
     } else if (a.lives !== b.lives) {
       return b.lives - a.lives;
     } else {
@@ -79,7 +79,7 @@ const getResultMessage = (results, result) => {
   const position = data.findIndex((item) => item.player) + 1;
   const all = data.length;
   return successMessage(position, all);
-}
+};
 
 const getResultData = (results, result) => {
   const {answers, lives, time} = result;
@@ -100,40 +100,40 @@ const getResultData = (results, result) => {
   }
 
   return resultData;
-}
+};
 
 const getLife = (number) => {
   return new Life(number);
-}
+};
 
 const getTimer = (number) => {
   return new Timer(number);
-}
+};
 
 const checkQuestion = (question, answer) => {
   if (!question || !answer) {
     return false;
   }
 
-  if(!(question.answers instanceof Array) || !(answer instanceof Array)) {
+  if (!(question.answers instanceof Array) || !(answer instanceof Array)) {
     return false;
   }
 
   const correctIndexes = question.answers.reduce((arr, item, index) => (item.correct) ? [...arr, index] : arr, []);
   return JSON.stringify(correctIndexes.sort()) === JSON.stringify(answer.sort());
-}
+};
 
 const checkArtistQuestion = (question, answerIndex) => {
-  if(!(question.answers instanceof Array) || !(typeof answerIndex === 'number')) {
+  if (!(question.answers instanceof Array) || !(typeof answerIndex === `number`)) {
     return false;
   }
 
   return question.answers[answerIndex].isCorrect;
-}
+};
 
 const checkGenreQuestion = (question, answer) => {
   return answer.every((item) => item === question.genre);
-}
+};
 
 export {
   NUMBER_OF_LIVES,

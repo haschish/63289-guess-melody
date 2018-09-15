@@ -29,9 +29,9 @@ class GameModel {
       time: this.state.timeAnswer
     };
 
-    switch(this.question.type) {
-      case 'genre': answer.correct = checkGenreQuestion(this.question, selectedIndexes); break;
-      case 'artist': answer.correct = checkArtistQuestion(this.question, selectedIndexes); break;
+    switch (this.question.type) {
+      case `genre`: answer.correct = checkGenreQuestion(this.question, selectedIndexes); break;
+      case `artist`: answer.correct = checkArtistQuestion(this.question, selectedIndexes); break;
     }
 
     if (!answer.correct) {
@@ -45,7 +45,7 @@ class GameModel {
     this._state.answers.push(answer);
     this._currentQuestionIndex++;
     if (this._currentQuestionIndex >= this.data.questions.length) {
-      this._endGame()
+      this._endGame();
       return;
     }
     this.onQuestionChange();
@@ -63,7 +63,7 @@ class GameModel {
   tick() {
     const time = this._state.time - 1;
     const timeAnswer = this._state.timeAnswer + 1;
-    this._state = {...this._state, time, timeAnswer};
+    this._state = Object.assign({}, this._state, {time, timeAnswer});
     this.onTimeChange();
     if (this.state.time === 0) {
       this._endGame();

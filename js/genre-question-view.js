@@ -7,22 +7,22 @@ class GenreQuestionView extends GameScreenView {
       <h2 class="game__title">${data.question}</h2>
       <form class="game__tracks">
         ${data.answers.map((item, index) => {
-          const autoplay = (index === 0) ? `autoplay="true"` : ``;
-          const trackButtonClass = (index === 0) ? `track__button--pause` : `track__button--play`;
+    const autoplay = (index === 0) ? `autoplay="true"` : ``;
+    const trackButtonClass = (index === 0) ? `track__button--pause` : `track__button--play`;
 
-          return `
-            <div class="track">
-              <button class="track__button ${trackButtonClass}" type="button" data-index="${index}"></button>
-              <div class="track__status">
-                <audio src="${item.src}" ${autoplay} loop="true"></audio>
-              </div>
-              <div class="game__answer">
-                <input class="game__input visually-hidden" type="checkbox" name="answer" value="${item.genre}" id="answer-${index}">
-                <label class="game__check" for="answer-${index}">Отметить</label>
-              </div>
-            </div>
-          `;
-        }).join('')}
+    return `
+      <div class="track">
+        <button class="track__button ${trackButtonClass}" type="button" data-index="${index}"></button>
+        <div class="track__status">
+          <audio src="${item.src}" ${autoplay} loop="true"></audio>
+        </div>
+        <div class="game__answer">
+          <input class="game__input visually-hidden" type="checkbox" name="answer" value="${item.genre}" id="answer-${index}">
+          <label class="game__check" for="answer-${index}">Отметить</label>
+        </div>
+      </div>
+    `;
+  }).join(``)}
 
         <button class="game__submit button" type="submit" disabled>Ответить</button>
       </form>
@@ -81,7 +81,7 @@ class GenreQuestionView extends GameScreenView {
     this.onAnswer(selectedIndexes);
   }
 
-  onAnswer(selectedIndexes) {
+  onAnswer() {
   }
 }
 

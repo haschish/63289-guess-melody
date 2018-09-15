@@ -4,9 +4,12 @@ import GameModel from './game-model';
 import Game from './game';
 import Result from './result';
 import API from './api';
-import { FAIL_POINTS, getResultData } from './domain.js';
+import {FAIL_POINTS, getResultData} from './domain.js';
 
 class Application {
+  static showError() {
+
+  }
 
   static showWelcome() {
     const welcome = new Welcome();
@@ -21,7 +24,7 @@ class Application {
         changeScreen(game.element);
         game.start();
       })
-      .catch(console.log);
+      .catch(Application.showError);
   }
 
   static showResult(result) {
@@ -35,8 +38,9 @@ class Application {
         if (points > FAIL_POINTS) {
           return API.saveResult({points, lives, time});
         }
+        return 0;
       })
-      .catch(console.log);
+      .catch(Application.showError);
   }
 
 }

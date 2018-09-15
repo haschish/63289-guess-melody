@@ -14,7 +14,7 @@ class WelcomeView extends AbstractView {
       <h2 class="welcome__rules-title">Правила игры</h2>
       <p class="welcome__text">${data.ruleText}</p>
       <ul class="welcome__rules-list">
-        ${data.rules.map(item => `<li>${item}</li>`).join('')}
+        ${data.rules.map((item) => `<li>${item}</li>`).join(``)}
       </ul>
       <p class="welcome__text">${data.wishText}</p>
     `;

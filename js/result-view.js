@@ -1,4 +1,4 @@
-import {countPoints, getResultMessage, NUMBER_OF_LIVES, FAIL_POINTS, TIME_FAST_ANSWER} from './domain.js';
+import {FAIL_POINTS} from './domain.js';
 import AbstractView from './abstract-view.js';
 
 const renderResult = (data) => {
@@ -13,12 +13,12 @@ const renderResult = (data) => {
       <p class="result__text">${data.text}</p>
     `;
   }
-}
+};
 
 class ResultView extends AbstractView {
   constructor(data) {
     super();
-    this.data = (data instanceof Object) ? data : {};;
+    this.data = (data instanceof Object) ? data : {};
   }
 
   get template() {

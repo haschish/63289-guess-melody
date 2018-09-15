@@ -1,6 +1,5 @@
 import ResultView from './result-view';
 import Application from './application';
-import {getResultData} from './domain.js';
 
 class Result {
   constructor(data) {

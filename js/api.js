@@ -1,6 +1,6 @@
 
 const URL = `https://es.dump.academy/guess-melody`;
-const APP_ID = '1Kiek33kdE093df4';
+const APP_ID = `1Kiek33kdE093df4`;
 
 const checkStatus = (res) => {
   if (res.ok) {
@@ -33,4 +33,4 @@ class API {
   }
 }
 
-export default API
+export default API;

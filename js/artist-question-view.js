@@ -12,16 +12,16 @@ class ArtistQuestionView extends GameScreenView {
 
       <form class="game__artist">
         ${data.answers.map((item, index) => {
-          return `
-            <div class="artist">
-              <input class="artist__input visually-hidden" type="radio" name="answer" value="${index}" id="answer-${index}">
-              <label class="artist__name" for="answer-${index}">
-                <img class="artist__picture" src="${item.image.url || `http://placehold.it/134x134`}" alt="${item.title}">
-                ${item.title}
-              </label>
-            </div>
-          `;
-        }).join('')}
+    return `
+      <div class="artist">
+        <input class="artist__input visually-hidden" type="radio" name="answer" value="${index}" id="answer-${index}">
+        <label class="artist__name" for="answer-${index}">
+          <img class="artist__picture" src="${item.image.url || `http://placehold.it/134x134`}" alt="${item.title}">
+          ${item.title}
+        </label>
+      </div>
+    `;
+  }).join(``)}
       </form>
     `;
   }
@@ -58,12 +58,12 @@ class ArtistQuestionView extends GameScreenView {
       classList.replace(`${prefix}--pause`, `${prefix}--play`);
       audio.pause();
     } else {
-      classList.replace(`${prefix}--play`, `${prefix}--pause`)
+      classList.replace(`${prefix}--play`, `${prefix}--pause`);
       audio.play();
     }
   }
 
-  onAnswer(selectedIndexes) {
+  onAnswer() {
   }
 }
 

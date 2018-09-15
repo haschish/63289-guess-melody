@@ -12,7 +12,7 @@ const getGenreAnswer = (question) => {
 };
 
 const getArtistAnswer = (question) => {
-  return question.answers.find(item => item.isCorrect).title;
+  return question.answers.find((item) => item.isCorrect).title;
 };
 
 const consoleAnswer = (question) => {
@@ -21,7 +21,8 @@ const consoleAnswer = (question) => {
     case `genre`: answer = getGenreAnswer(question); break;
     case `artist`: answer = getArtistAnswer(question); break;
   }
-  console.log(answer);
+  return answer;
+  // console.info(answer);
 };
 
 class Game {
@@ -45,9 +46,9 @@ class Game {
     const question = this.model.question;
 
     // <debug>
-      if (debugMode) {
-        consoleAnswer(question);
-      }
+    if (debugMode) {
+      consoleAnswer(question);
+    }
     // </debug>
 
     let gameScreen;

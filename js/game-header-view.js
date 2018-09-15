@@ -53,7 +53,7 @@ class GameHeaderView extends AbstractView {
       </div>
 
       <div class="game__mistakes">
-        ${Array.from({length: mistakes}).map(() => `<div class="wrong"></div>`).join('')}
+        ${Array.from({length: mistakes}).map(() => `<div class="wrong"></div>`).join(``)}
       </div>
     `;
   }
