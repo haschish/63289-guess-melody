@@ -1,10 +1,11 @@
 import AbstractView from './abstract-view';
+import {NUMBER_OF_LIVES} from './domain';
 
 class GameHeaderView extends AbstractView {
   constructor({time, lives}) {
     super();
     this.time = time;
-    this.lives = lives;
+    this.mistakes = NUMBER_OF_LIVES - lives;
   }
 
   get tagName() {
@@ -30,7 +31,7 @@ class GameHeaderView extends AbstractView {
   }
 
   get template() {
-    const {time, lives} = this;
+    const {time, mistakes} = this;
     const minutes = this._getMinutes(time);
     const seconds = this._getSeconds(time);
 
@@ -52,7 +53,7 @@ class GameHeaderView extends AbstractView {
       </div>
 
       <div class="game__mistakes">
-        ${Array.from({length: lives}).map(() => `<div class="wrong"></div>`).join('')}
+        ${Array.from({length: mistakes}).map(() => `<div class="wrong"></div>`).join('')}
       </div>
     `;
   }
