@@ -3,6 +3,7 @@ import GameHeaderView from './game-header-view.js';
 import GameScreenView from './game-screen-view';
 import GenreQuestionView from './genre-question-view';
 import ArtistQuestionView from './artist-question-view';
+import ConfirmView from './confirm-view';
 import Application from './application';
 
 const ONE_SECOND = 1000;
@@ -46,7 +47,17 @@ class Game {
   }
 
   _exit() {
-    Application.showWelcome();
+    const confirm = new ConfirmView();
+    confirm.onOkClick = () => {
+      confirm.unbind();
+      Application.showWelcome();
+    };
+    confirm.onCancelClick = () => {
+      confirm.unbind();
+      this.root.removeChild(confirm.element);
+    };
+
+    this.root.appendChild(confirm.element);
   }
 
   _startTimer() {
