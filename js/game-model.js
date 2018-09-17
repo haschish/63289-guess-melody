@@ -1,4 +1,5 @@
-import {checkArtistQuestion, checkGenreQuestion, NUMBER_OF_LIVES, TIME_GAME} from './domain.js';
+import {checkArtistQuestion, checkGenreQuestion} from './domain.js';
+import {NUMBER_OF_LIVES, Time} from './settings';
 
 class GameModel {
   constructor(data) {
@@ -17,7 +18,7 @@ class GameModel {
   init() {
     this._state = {
       lives: NUMBER_OF_LIVES,
-      time: TIME_GAME,
+      time: Time.GAME,
       timeAnswer: 0,
       answers: []
     };
@@ -36,19 +37,29 @@ class GameModel {
 
     if (!answer.correct) {
       this._decreaseLives();
-      if (this.state.lives === 0) {
+      if (this._isEndLives()) {
         this._endGame();
         return;
       }
     }
 
     this._state.answers.push(answer);
-    this._currentQuestionIndex++;
-    if (this._currentQuestionIndex >= this.data.questions.length) {
+    if (this._isLastQuestion()) {
       this._endGame();
       return;
     }
+
+    this._currentQuestionIndex++;
+    this.resetTimeAnswer();
     this.onQuestionChange();
+  }
+
+  _isEndLives() {
+    return this.state.lives === 0;
+  }
+
+  _isLastQuestion() {
+    return this._currentQuestionIndex >= this.data.questions.length - 1;
   }
 
   _decreaseLives() {

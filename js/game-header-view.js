@@ -1,5 +1,5 @@
 import AbstractView from './abstract-view';
-import {NUMBER_OF_LIVES, TIME_FINISHED, TIME_GAME} from './domain';
+import {NUMBER_OF_LIVES, Time} from './settings';
 
 class GameHeaderView extends AbstractView {
   constructor({time, lives}) {
@@ -34,10 +34,10 @@ class GameHeaderView extends AbstractView {
     const {time, mistakes} = this;
     const minutes = this._getMinutes(time);
     const seconds = this._getSeconds(time);
-    const timerClassFinished = (time < TIME_FINISHED) ? `timer__value--finished` : ``;
+    const timerClassFinished = (time < Time.FINISHED) ? `timer__value--finished` : ``;
     const rCircle = 370;
     const lengthCircle = Math.floor(2 * Math.PI * rCircle);
-    const offset = Math.floor(lengthCircle - time * lengthCircle / TIME_GAME);
+    const offset = Math.floor(lengthCircle - time * lengthCircle / Time.GAME);
 
     return `
       <a class="game__back" href="#">

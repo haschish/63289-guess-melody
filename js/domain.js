@@ -1,17 +1,15 @@
-import Life from './Life.js';
-import Timer from './Timer.js';
+import {K_FAIL, MIN_ANSWERS, NUMBER_OF_LIVES, Time, Point} from './settings';
 
-const K_FOR_FAIL = 2;
-const POINTS_FOR_VALID_ANSWER = 1;
-const POINTS_FOR_FAST_ANSWER = 2;
-const TIME_FAST_ANSWER = 30;
-const MIN_ANSWERS = 10;
-const NUMBER_OF_LIVES = 3;
-const FAIL_POINTS = -1;
-const TIME_GAME = 300;
-const TIME_FINISHED = 30;
+const Message = {
+  TIMEOUT: `Время вышло! Вы не успели отгадать все мелодии`,
+  ATTEMPTS_END: `У вас закончились все попытки. Ничего, повезёт в следующий раз!`,
+  YOU_ARE_MUSIC_LOVER: `Вы настоящий меломан!`,
+  WHAT_A_PITY: `Какая жалость!`,
+  SADLY: `Увы и ах!`
+};
+const SECONDS_IN_MINUTE = 60;
 
-const successMessage = (position = 1, all = position) => {
+const getSuccessMessage = (position = 1, all = position) => {
   position = parseInt(position, 10);
   position = (isNaN(position) || position < 1) ? 1 : position;
 
@@ -21,22 +19,21 @@ const successMessage = (position = 1, all = position) => {
   const percentWhoWorse = parseInt((all - position) / all * 100, 10);
   return `Вы заняли ${position} место из ${all} игроков. Это лучше, чем у ${percentWhoWorse}% игроков`;
 };
-const timeoutMessage = `Время вышло! Вы не успели отгадать все мелодии`;
-const attemptsEndMessage = `У вас закончились все попытки. Ничего, повезёт в следующий раз!`;
+
 
 const countPoints = (responses = [], lives = 0) => {
   if (responses.length < MIN_ANSWERS) {
-    return FAIL_POINTS;
+    return Point.FAIL;
   }
 
   let sum = 0;
   responses.forEach((item) => {
     if (item.correct) {
-      sum += (item.time < TIME_FAST_ANSWER) ? POINTS_FOR_FAST_ANSWER : POINTS_FOR_VALID_ANSWER;
+      sum += (item.time < Time.FAST_ANSWER) ? Point.FAST_ANSWER : Point.VALID_ANSWER;
     }
   });
 
-  sum += (lives - NUMBER_OF_LIVES) * K_FOR_FAIL;
+  sum += (lives - NUMBER_OF_LIVES) * K_FAIL;
 
   return Math.max(sum, 0);
 };
@@ -62,8 +59,8 @@ const getResultMessage = (results, result) => {
     throw new Error(`property time of object result must be a number and >= 0`);
   }
 
-  if (result.points === FAIL_POINTS) {
-    return (result.lives === 0) ? attemptsEndMessage : timeoutMessage;
+  if (result.points === Point.FAIL) {
+    return (result.lives === 0) ? Message.ATTEMPTS_END : Message.TIMEOUT;
   }
 
   const data = results.concat(Object.assign({}, result, {player: true}));
@@ -79,7 +76,19 @@ const getResultMessage = (results, result) => {
 
   const position = data.findIndex((item) => item.player) + 1;
   const all = data.length;
-  return successMessage(position, all);
+  return getSuccessMessage(position, all);
+};
+
+const getTimeString = (seconds) => {
+  seconds = parseInt(seconds, 10);
+  if (isNaN(seconds)) {
+    throw new Error(`parameter must be a number`);
+  }
+
+  const secondsString = `${seconds % SECONDS_IN_MINUTE} секунд`;
+  const minutes = Math.floor(seconds / SECONDS_IN_MINUTE);
+  const minutesString = (minutes > 0) ? `${minutes} минут` : ``;
+  return `${minutesString} ${secondsString}`.trim();
 };
 
 const getResultData = (results, result) => {
@@ -88,40 +97,20 @@ const getResultData = (results, result) => {
   const resultData = {
     points,
     lives,
-    time
+    time: Time.GAME - time
   };
-  resultData.text = getResultMessage(results, resultData);
-  if (resultData.points > FAIL_POINTS) {
-    const countFastAnswers = answers.filter((item) => item.time < TIME_FAST_ANSWER).length;
 
-    resultData.title = `Вы настоящий меломан!`;
-    resultData.total = `За ${time} секунд вы набрали ${points} баллов (${countFastAnswers} быстрых), совершив ${NUMBER_OF_LIVES - lives} ошибки`;
+  resultData.text = getResultMessage(results, resultData);
+  if (resultData.points > Point.FAIL) {
+    const countFastAnswers = answers.filter((item) => item.time < Time.FAST_ANSWER).length;
+
+    resultData.title = Message.YOU_ARE_MUSIC_LOVER;
+    resultData.total = `За ${getTimeString(resultData.time)} вы набрали ${points} баллов (${countFastAnswers} быстрых), совершив ${NUMBER_OF_LIVES - lives} ошибки`;
   } else {
-    resultData.title = (lives === 0) ? `Какая жалость!` : `Увы и ах!`;
+    resultData.title = (lives === 0) ? Message.WHAT_A_PITY : Message.SADLY;
   }
 
   return resultData;
-};
-
-const getLife = (number) => {
-  return new Life(number);
-};
-
-const getTimer = (number) => {
-  return new Timer(number);
-};
-
-const checkQuestion = (question, answer) => {
-  if (!question || !answer) {
-    return false;
-  }
-
-  if (!(question.answers instanceof Array) || !(answer instanceof Array)) {
-    return false;
-  }
-
-  const correctIndexes = question.answers.reduce((arr, item, index) => (item.correct) ? [...arr, index] : arr, []);
-  return JSON.stringify(correctIndexes.sort()) === JSON.stringify(answer.sort());
 };
 
 const checkArtistQuestion = (question, answerIndex) => {
@@ -137,22 +126,13 @@ const checkGenreQuestion = (question, answer) => {
 };
 
 export {
-  NUMBER_OF_LIVES,
-  TIME_GAME,
-  TIME_FINISHED,
-  FAIL_POINTS,
-  TIME_FAST_ANSWER,
-  successMessage,
-  timeoutMessage,
-  attemptsEndMessage,
+  Time,
+  Point,
+  getSuccessMessage,
   countPoints,
   getResultMessage,
   getResultData,
-  getLife,
-  getTimer,
-  checkQuestion,
   checkArtistQuestion,
-  checkGenreQuestion
+  checkGenreQuestion,
+  getTimeString
 };
-
-

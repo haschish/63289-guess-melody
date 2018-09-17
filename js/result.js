@@ -13,7 +13,7 @@ class Result {
   }
 
   onReplayClick() {
-    Application.showWelcome();
+    Application.showGame();
   }
 }
 

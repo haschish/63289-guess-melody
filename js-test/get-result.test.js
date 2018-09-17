@@ -1,5 +1,5 @@
 import {assert} from 'chai';
-import {getResultMessage, successMessage, timeoutMessage, attemptsEndMessage} from '../js/domain.js';
+import {getResultMessage, getSuccessMessage, timeoutMessage, attemptsEndMessage} from '../js/domain.js';
 
 const results = [
   {points: 10, lives: 3, time: 120},
@@ -29,17 +29,17 @@ describe(`Get result message`, () => {
   });
 
   it(`should return "Вы заняли 1 место из 4 игроков. Это лучше, чем у 75% игроков" when first parameter is array ${JSON.stringify(results)} and secord parameter is object {points: 10, lives: 3, time: 110}`, () => {
-    const expectedMessage = successMessage(1, 4);
+    const expectedMessage = getSuccessMessage(1, 4);
     assert.equal(getResultMessage(results, {points: 10, lives: 3, time: 110}), expectedMessage);
   });
 
   it(`should return "Вы заняли 4 место из 4 игроков. Это лучше, чем у 0% игроков" when first parameter is array result is ${JSON.stringify(results)} and secord parameter is object {points: 7, lives: 1, time: 30}`, () => {
-    const expectedMessage = successMessage(4, 4);
+    const expectedMessage = getSuccessMessage(4, 4);
     assert.equal(getResultMessage(results, {points: 7, lives: 1, time: 30}), expectedMessage);
   });
 
   it(`should return "Вы заняли 2 место из 4 игроков. Это лучше, чем у 50% игроков" when first parameter is array result is ${JSON.stringify(results)} and secord parameter is object {points: 10, lives: 2, time: 100}`, () => {
-    const expectedMessage = successMessage(2, 4);
+    const expectedMessage = getSuccessMessage(2, 4);
     assert.equal(getResultMessage(results, {points: 10, lives: 2, time: 100}), expectedMessage);
   });
 

@@ -1,9 +1,9 @@
-import {FAIL_POINTS} from './domain.js';
+import {Point} from './domain.js';
 import AbstractView from './abstract-view.js';
 
 const renderResult = (data) => {
   switch (data.points) {
-    case FAIL_POINTS: return `
+    case Point.FAIL: return `
       <h2 class="result__title">${data.title}</h2>
       <p class="result__total result__total--fail">${data.text}</p>
     `;

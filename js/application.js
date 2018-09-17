@@ -4,27 +4,35 @@ import GameModel from './game-model';
 import Game from './game';
 import Result from './result';
 import API from './api';
-import {FAIL_POINTS, getResultData} from './domain.js';
+import {getResultData, Point} from './domain.js';
+import ErrorView from './error-view';
+
+let questions;
 
 class Application {
-  static showError() {
-
+  static showError(e) {
+    const error = new ErrorView(e.message);
+    document.body.appendChild(error.element);
   }
 
   static showWelcome() {
     const welcome = new Welcome();
+    welcome.showLoading();
     changeScreen(welcome.element);
+    API.loadQuestions()
+      .then((data) => {
+        questions = data;
+        return questions;
+      })
+      .catch(Application.showError)
+      .then(() => welcome.hideLoading());
   }
 
   static showGame() {
-    API.loadQuestions()
-      .then((questions) => new GameModel({questions}))
-      .then((model) => new Game(model))
-      .then((game) => {
-        changeScreen(game.element);
-        game.start();
-      })
-      .catch(Application.showError);
+    const model = new GameModel({questions});
+    const game = new Game(model);
+    changeScreen(game.element);
+    game.start();
   }
 
   static showResult(result) {
@@ -35,7 +43,7 @@ class Application {
       .then((screen) => {
         changeScreen(screen.element);
         const {points, lives, time} = screen.data;
-        if (points > FAIL_POINTS) {
+        if (points > Point.FAIL) {
           return API.saveResult({points, lives, time});
         }
         return 0;
@@ -47,7 +55,7 @@ class Application {
 
 export default Application;
 
-const debugMode = false;
+const debugMode = true;
 
 export {
   debugMode

@@ -1,4 +1,3 @@
-
 const URL = `https://es.dump.academy/guess-melody`;
 const APP_ID = `1Kiek33kdE093df4`;
 
@@ -6,7 +5,7 @@ const checkStatus = (res) => {
   if (res.ok) {
     return res;
   } else {
-    throw new Error(`${res.status}: ${res.statusText}`);
+    throw new Error(`Статус: ${res.status}. ${res.statusText}`);
   }
 };
 
@@ -14,7 +13,9 @@ const toJSON = (res) => res.json();
 
 class API {
   static loadQuestions() {
-    return fetch(`${URL}/questions`).then(checkStatus).then(toJSON);
+    return fetch(`${URL}/questions`)
+      .then(checkStatus)
+      .then(toJSON);
   }
 
   static loadResults() {
