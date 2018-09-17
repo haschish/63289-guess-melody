@@ -15,16 +15,6 @@ class GameModel {
     return this.data.questions[this._currentQuestionIndex];
   }
 
-  init() {
-    this._state = {
-      lives: NUMBER_OF_LIVES,
-      time: Time.GAME,
-      timeAnswer: 0,
-      answers: []
-    };
-    this._currentQuestionIndex = 0;
-  }
-
   set answer(selectedIndexes) {
     const answer = {
       time: this.state.timeAnswer
@@ -54,17 +44,14 @@ class GameModel {
     this.onQuestionChange();
   }
 
-  _isEndLives() {
-    return this.state.lives === 0;
-  }
-
-  _isLastQuestion() {
-    return this._currentQuestionIndex >= this.data.questions.length - 1;
-  }
-
-  _decreaseLives() {
-    this._state.lives--;
-    this.onLivesChange();
+  init() {
+    this._state = {
+      lives: NUMBER_OF_LIVES,
+      time: Time.GAME,
+      timeAnswer: 0,
+      answers: []
+    };
+    this._currentQuestionIndex = 0;
   }
 
   resetTimeAnswer() {
@@ -80,6 +67,19 @@ class GameModel {
       this._endGame();
       return;
     }
+  }
+
+  _isEndLives() {
+    return this.state.lives === 0;
+  }
+
+  _isLastQuestion() {
+    return this._currentQuestionIndex >= this.data.questions.length - 1;
+  }
+
+  _decreaseLives() {
+    this._state.lives--;
+    this.onLivesChange();
   }
 
   _endGame() {

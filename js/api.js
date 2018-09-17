@@ -4,9 +4,9 @@ const APP_ID = `1Kiek33kdE093df4`;
 const checkStatus = (res) => {
   if (res.ok) {
     return res;
-  } else {
-    throw new Error(`Статус: ${res.status}. ${res.statusText}`);
   }
+
+  throw new Error(`Статус: ${res.status}. ${res.statusText}`);
 };
 
 const toJSON = (res) => res.json();
@@ -30,6 +30,7 @@ class API {
       },
       method: `POST`
     };
+
     return fetch(`${URL}/stats/${APP_ID}`, requestSettings).then(checkStatus);
   }
 }

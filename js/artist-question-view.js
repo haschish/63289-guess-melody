@@ -1,5 +1,5 @@
 import GameScreenView from './game-screen-view';
-import {debugMode} from './application';
+import {DEBUG_MODE} from './settings';
 
 class ArtistQuestionView extends GameScreenView {
   get template() {
@@ -13,7 +13,7 @@ class ArtistQuestionView extends GameScreenView {
 
       <form class="game__artist">
         ${data.answers.map((item, index) => {
-    const debugTipStyle = (debugMode && item.isCorrect) ? `style="border: solid 5px red;"` : ``;
+    const debugTipStyle = (DEBUG_MODE && item.isCorrect) ? `style="border: solid 5px red;"` : ``;
     return `
       <div class="artist">
         <input class="artist__input visually-hidden" type="radio" name="answer" value="${index}" id="answer-${index}">

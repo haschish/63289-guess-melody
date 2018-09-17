@@ -1,4 +1,5 @@
 import {K_FAIL, MIN_ANSWERS, NUMBER_OF_LIVES, Time, Point} from './settings';
+import {getMinutesFromTimeInSeconds, getSecondsFromTimeInSeconds} from './utils';
 
 const Message = {
   TIMEOUT: `Время вышло! Вы не успели отгадать все мелодии`,
@@ -7,7 +8,6 @@ const Message = {
   WHAT_A_PITY: `Какая жалость!`,
   SADLY: `Увы и ах!`
 };
-const SECONDS_IN_MINUTE = 60;
 
 const getSuccessMessage = (position = 1, all = position) => {
   position = parseInt(position, 10);
@@ -47,30 +47,16 @@ const getResultMessage = (results, result) => {
     throw new Error(`second parameter must be an object`);
   }
 
-  if (!Number.isInteger(result.points)) {
-    throw new Error(`property points must be a number`);
-  }
-
-  if (!Number.isInteger(result.lives) || result.lives < 0) {
-    throw new Error(`property lives of object result must be a number and >= 0`);
-  }
-
-  if (!Number.isInteger(result.time) || result.time < 0) {
-    throw new Error(`property time of object result must be a number and >= 0`);
-  }
-
   if (result.points === Point.FAIL) {
     return (result.lives === 0) ? Message.ATTEMPTS_END : Message.TIMEOUT;
   }
 
   const data = results.concat(Object.assign({}, result, {player: true}));
   data.sort((a, b) => {
-    if (a.points !== b.points) {
-      return b.points - a.points;
-    } else if (a.lives !== b.lives) {
-      return b.lives - a.lives;
-    } else {
-      return a.time - b.time;
+    switch (true) {
+      case (a.points !== b.points): return b.points - a.points;
+      case (a.lives !== b.lives): return b.lives - a.lives;
+      default: return a.time - b.time;
     }
   });
 
@@ -79,16 +65,11 @@ const getResultMessage = (results, result) => {
   return getSuccessMessage(position, all);
 };
 
-const getTimeString = (seconds) => {
-  seconds = parseInt(seconds, 10);
-  if (isNaN(seconds)) {
-    throw new Error(`parameter must be a number`);
-  }
+const getTimeString = (time) => {
+  const minutes = getMinutesFromTimeInSeconds(time);
+  const seconds = getSecondsFromTimeInSeconds(time);
 
-  const secondsString = `${seconds % SECONDS_IN_MINUTE} секунд`;
-  const minutes = Math.floor(seconds / SECONDS_IN_MINUTE);
-  const minutesString = (minutes > 0) ? `${minutes} минут` : ``;
-  return `${minutesString} ${secondsString}`.trim();
+  return `${(minutes > 0) ? `${minutes} минут` : ``} ${seconds} секунд`.trim();
 };
 
 const getResultData = (results, result) => {
@@ -126,8 +107,7 @@ const checkGenreQuestion = (question, answer) => {
 };
 
 export {
-  Time,
-  Point,
+  Message,
   getSuccessMessage,
   countPoints,
   getResultMessage,

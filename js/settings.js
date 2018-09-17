@@ -1,3 +1,4 @@
+const DEBUG_MODE = false;
 const K_FAIL = 2;
 const MIN_ANSWERS = 10;
 const NUMBER_OF_LIVES = 3;
@@ -13,6 +14,7 @@ const Point = {
 };
 
 export {
+  DEBUG_MODE,
   K_FAIL,
   MIN_ANSWERS,
   NUMBER_OF_LIVES,

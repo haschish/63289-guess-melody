@@ -1,5 +1,6 @@
 import AbstractView from './abstract-view';
 import {NUMBER_OF_LIVES, Time} from './settings';
+import {getMinutesFromTimeInSeconds, getSecondsFromTimeInSeconds, getTwoDigitNumber} from './utils';
 
 class GameHeaderView extends AbstractView {
   constructor({time, lives}) {
@@ -16,24 +17,10 @@ class GameHeaderView extends AbstractView {
     return `game__header`;
   }
 
-  _getTwoDigitNumber(number) {
-    return (number < 10) ? `0${number}` : `${number}`;
-  }
-
-  _getMinutes(time) {
-    const minutes = parseInt(time / 60, 10);
-    return this._getTwoDigitNumber(minutes);
-  }
-
-  _getSeconds(time) {
-    const seconds = time % 60;
-    return this._getTwoDigitNumber(seconds);
-  }
-
   get template() {
     const {time, mistakes} = this;
-    const minutes = this._getMinutes(time);
-    const seconds = this._getSeconds(time);
+    const minutes = getMinutesFromTimeInSeconds(time);
+    const seconds = getSecondsFromTimeInSeconds(time);
     const timerClassFinished = (time < Time.FINISHED) ? `timer__value--finished` : ``;
     const rCircle = 370;
     const lengthCircle = Math.floor(2 * Math.PI * rCircle);
@@ -51,9 +38,9 @@ class GameHeaderView extends AbstractView {
       </svg>
 
       <div class="timer__value ${timerClassFinished}" xmlns="http://www.w3.org/1999/xhtml">
-        <span class="timer__mins">${minutes}</span>
+        <span class="timer__mins">${getTwoDigitNumber(minutes)}</span>
         <span class="timer__dots">:</span>
-        <span class="timer__secs">${seconds}</span>
+        <span class="timer__secs">${getTwoDigitNumber(seconds)}</span>
       </div>
 
       <div class="game__mistakes">

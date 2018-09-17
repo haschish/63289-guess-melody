@@ -25,6 +25,34 @@ class Game {
     this.root.appendChild(this.gameScreen.element);
   }
 
+  get element() {
+    return this.root;
+  }
+
+  start() {
+    this._startTimer();
+    this._renderQuestion();
+  }
+
+  end() {
+    this._stopTimer();
+    Application.showResult(this.model.state);
+  }
+
+  tick() {
+    this.model.tick();
+  }
+
+  updateHeader() {
+    const header = this._getHeader();
+    this.root.replaceChild(header.element, this.header.element);
+    this.header = header;
+  }
+
+  onGameScreenAnswer(answer) {
+    this.model.answer = answer;
+  }
+
   _renderQuestion() {
     const question = this.model.question;
     let gameScreen;
@@ -36,14 +64,6 @@ class Game {
 
     this.root.replaceChild(gameScreen.element, this.gameScreen.element);
     this.gameScreen = gameScreen;
-  }
-
-  get element() {
-    return this.root;
-  }
-
-  onGameScreenAnswer(answer) {
-    this.model.answer = answer;
   }
 
   _exit() {
@@ -75,26 +95,6 @@ class Game {
     const header = new GameHeaderView(this.model.state);
     header.onBackClick = this._exit.bind(this);
     return header;
-  }
-
-  start() {
-    this._startTimer();
-    this._renderQuestion();
-  }
-
-  end() {
-    this._stopTimer();
-    Application.showResult(this.model.state);
-  }
-
-  tick() {
-    this.model.tick();
-  }
-
-  updateHeader() {
-    const header = this._getHeader();
-    this.root.replaceChild(header.element, this.header.element);
-    this.header = header;
   }
 }
 

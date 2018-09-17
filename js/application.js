@@ -4,7 +4,8 @@ import GameModel from './game-model';
 import Game from './game';
 import Result from './result';
 import API from './api';
-import {getResultData, Point} from './domain.js';
+import {getResultData} from './domain.js';
+import {Point} from './settings';
 import ErrorView from './error-view';
 
 let questions;
@@ -54,9 +55,3 @@ class Application {
 }
 
 export default Application;
-
-const debugMode = true;
-
-export {
-  debugMode
-};

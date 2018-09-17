@@ -1,5 +1,5 @@
 import GameScreenView from './game-screen-view';
-import {debugMode} from './application';
+import {DEBUG_MODE} from './settings';
 
 class GenreQuestionView extends GameScreenView {
   get template() {
@@ -10,7 +10,7 @@ class GenreQuestionView extends GameScreenView {
         ${data.answers.map((item, index) => {
     const autoplay = (index === 0) ? `autoplay="true"` : ``;
     const trackButtonClass = (index === 0) ? `track__button--pause` : `track__button--play`;
-    const debugTipStyle = (debugMode && item.genre === data.genre) ? `style="border-bottom: solid 2px red;"` : ``;
+    const debugTipStyle = (DEBUG_MODE && item.genre === data.genre) ? `style="border-bottom: solid 2px red;"` : ``;
 
     return `
       <div class="track">

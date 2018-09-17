@@ -1,9 +1,9 @@
 import {assert} from 'chai';
 import {getTimeString} from '../js/domain.js';
 
-describe.only(`Get time string`, () => {
-  it(`should throw Error('first parameter must be an array') when parameter is not number`, () => {
-    assert.throws(() => getTimeString(), `parameter must be a number`);
+describe(`Get time string`, () => {
+  it(`should throw Error('the parameter must be a number') when parameter is not number`, () => {
+    assert.throws(() => getTimeString(), `the parameter must be a number`);
   });
 
   it(`should return "0 секунд" when parameter is 0`, () => {
