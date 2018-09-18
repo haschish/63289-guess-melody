@@ -1,4 +1,4 @@
-const DEBUG_MODE = true;
+const DEBUG_MODE = false;
 const MIN_ANSWERS = 10;
 const NUMBER_OF_LIVES = 3;
 const Time = {
