@@ -1,4 +1,4 @@
-import {K_FAIL, MIN_ANSWERS, NUMBER_OF_LIVES, Time, Point} from './settings';
+import {MIN_ANSWERS, NUMBER_OF_LIVES, Time, Point} from './settings';
 import {getMinutesFromTimeInSeconds, getSecondsFromTimeInSeconds} from './utils';
 
 const Message = {
@@ -20,22 +20,24 @@ const getSuccessMessage = (position = 1, all = position) => {
   return `Вы заняли ${position} место из ${all} игроков. Это лучше, чем у ${percentWhoWorse}% игроков`;
 };
 
+const getPointsForAnswer = (answer) => {
+  if (!(answer instanceof Object)) {
+    throw new Error(`the parameter must be an object`);
+  }
 
-const countPoints = (responses = [], lives = 0) => {
+  switch (true) {
+    case (!answer.correct): return Point.FAIL_ANSWER;
+    case (answer.time < Time.FAST_ANSWER): return Point.FAST_ANSWER;
+    default: return Point.VALID_ANSWER;
+  }
+};
+
+const countPoints = (responses = []) => {
   if (responses.length < MIN_ANSWERS) {
     return Point.FAIL;
   }
 
-  let sum = 0;
-  responses.forEach((item) => {
-    if (item.correct) {
-      sum += (item.time < Time.FAST_ANSWER) ? Point.FAST_ANSWER : Point.VALID_ANSWER;
-    }
-  });
-
-  sum += (lives - NUMBER_OF_LIVES) * K_FAIL;
-
-  return Math.max(sum, 0);
+  return responses.map(getPointsForAnswer).reduce((sum, item) => sum + item, 0);
 };
 
 const getResultMessage = (results, result) => {
@@ -110,6 +112,7 @@ export {
   Message,
   getSuccessMessage,
   countPoints,
+  getPointsForAnswer,
   getResultMessage,
   getResultData,
   checkArtistQuestion,

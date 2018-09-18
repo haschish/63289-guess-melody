@@ -1,5 +1,4 @@
-const DEBUG_MODE = false;
-const K_FAIL = 2;
+const DEBUG_MODE = true;
 const MIN_ANSWERS = 10;
 const NUMBER_OF_LIVES = 3;
 const Time = {
@@ -10,12 +9,12 @@ const Time = {
 const Point = {
   VALID_ANSWER: 1,
   FAST_ANSWER: 2,
+  FAIL_ANSWER: -2,
   FAIL: -1
 };
 
 export {
   DEBUG_MODE,
-  K_FAIL,
   MIN_ANSWERS,
   NUMBER_OF_LIVES,
   Time,
