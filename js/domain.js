@@ -27,7 +27,8 @@ const getPointsForAnswer = (answer) => {
 
   if (!answer.correct) {
     return Point.FAIL_ANSWER;
-  } else if (answer.time < Time.FAST_ANSWER) {
+  }
+  if (answer.time < Time.FAST_ANSWER) {
     return Point.FAST_ANSWER;
   }
   return Point.VALID_ANSWER;
@@ -58,7 +59,8 @@ const getResultMessage = (results, result) => {
   data.sort((a, b) => {
     if (a.points !== b.points) {
       return b.points - a.points;
-    } else if (a.lives !== b.lives) {
+    }
+    if (a.lives !== b.lives) {
       return b.lives - a.lives;
     }
     return a.time - b.time;
