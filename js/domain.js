@@ -25,11 +25,12 @@ const getPointsForAnswer = (answer) => {
     throw new Error(`the parameter must be an object`);
   }
 
-  switch (true) {
-    case (!answer.correct): return Point.FAIL_ANSWER;
-    case (answer.time < Time.FAST_ANSWER): return Point.FAST_ANSWER;
-    default: return Point.VALID_ANSWER;
+  if (!answer.correct) {
+    return Point.FAIL_ANSWER;
+  } else if (answer.time < Time.FAST_ANSWER) {
+    return Point.FAST_ANSWER;
   }
+  return Point.VALID_ANSWER;
 };
 
 const countPoints = (responses = []) => {
@@ -55,11 +56,12 @@ const getResultMessage = (results, result) => {
 
   const data = results.concat(Object.assign({}, result, {player: true}));
   data.sort((a, b) => {
-    switch (true) {
-      case (a.points !== b.points): return b.points - a.points;
-      case (a.lives !== b.lives): return b.lives - a.lives;
-      default: return a.time - b.time;
+    if (a.points !== b.points) {
+      return b.points - a.points;
+    } else if (a.lives !== b.lives) {
+      return b.lives - a.lives;
     }
+    return a.time - b.time;
   });
 
   const position = data.findIndex((item) => item.player) + 1;
